@@ -1,0 +1,7 @@
+# Development #
+.env
+/dev/
+/db/
+
+# NPM #
+/node_modules/
