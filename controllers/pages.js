@@ -1,6 +1,7 @@
 const router = require('express').Router();
-const pages = require('./pages');
 
-router.use('/', pages);
+router.get('/', (_, res) => {
+    res.render('all');
+});
 
 module.exports = router;
