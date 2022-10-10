@@ -62,7 +62,12 @@ User.init({
     timestamps: false,
     underscored: true,
     modelName: 'user',
-    tableName: 'users_table'
+    tableName: 'users_table',
+    defaultScope: {
+        attributes: {
+            exclude: ['password'] // password column excluded by default
+        }
+    }
 });
 
 module.exports = User;

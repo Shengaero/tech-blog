@@ -13,6 +13,8 @@ async function seed() {
     console.log(JSON.stringify(users, null, 2));
     console.log(JSON.stringify(posts, null, 2));
     console.log(JSON.stringify(comments, null, 2));
+
+    await sequelize.close();
 }
 
 seed();
