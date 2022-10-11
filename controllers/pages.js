@@ -50,11 +50,36 @@ router.get('/register', async function (req, res) {
 router.get('/posts/:id', async function (req, res) {
     const { id } = req.params;
     try {
-        const post = Post.findByPk(id, {
-            include: [Comment]
+        const postData = await Post.findByPk(id, {
+            attributes: {
+                exclude: ['author_id']
+            },
+            include: [
+                {
+                    model: User,
+                    as: 'author'
+                },
+                {
+                    model: Comment,
+                    as: 'comments',
+                    include: [
+                        {
+                            model: User,
+                            as: 'author'
+                        }
+                    ],
+                    attributes: {
+                        exclude: ['author_id', 'post_id']
+                    }
+                }
+            ]
         });
+
+        const post = postData.get({ plain: true });
+        post.date = new Date(post.date.toString()).toLocaleDateString();
+        res.render('post', { post });
     } catch(err) {
-        console.err(err);
+        console.log(err);
     }
 });
 
