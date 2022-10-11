@@ -1,0 +1,6 @@
+{{> post-details post }}
+<div>
+  {{#each post.comments as |comment|}}
+  {{> comment-details}}
+  {{/each}}
+</div>
