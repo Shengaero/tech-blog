@@ -1,6 +1,7 @@
 <div class="card my-4">
   <h5 class="card-header text-bg-primary">Login</h5>
   <div class="card-body">
+    <div class="mb-3 mx-4 invisible text-danger fw-bold" id="incorrectUserPass"></div>
     <form class="needs-validation" id="loginForm" novalidate>
       {{> form-username}}
       {{> form-password}}
