@@ -1,3 +1,4 @@
+require('dotenv').config();
 const sequelize = require("../config/connection");
 const userSeeds = require('./user-seeds');
 const postSeeds = require('./post-seeds');

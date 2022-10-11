@@ -4,7 +4,7 @@ function handleError(err, res) {
     if(err instanceof StatusError) {
         res.status(err.statusCode);
         res.json({ message: err.message });
-    } else if(err.name === 'SequelizeValidationError') {
+    } else if(err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
         res.status(400);
         const errors = err.errors;
         if(errors.length === 1) {

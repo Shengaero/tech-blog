@@ -30,7 +30,21 @@ router.get('/login', async function (req, res) {
         res.redirect('/');
         return;
     }
-    res.render('login');
+    res.render('login', {
+        needScript: true,
+        script: 'login'
+    });
+});
+
+router.get('/register', async function (req, res) {
+    if(req.session.loggedIn) {
+        res.redirect('/');
+        return;
+    }
+    res.render('register', {
+        needScript: true,
+        script: 'register'
+    });
 });
 
 router.get('/posts/:id', async function (req, res) {

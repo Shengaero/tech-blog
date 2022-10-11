@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
-require('dotenv').config();
+
+const logging = process.env.DB_LOGS === 'true' ? console.log : (..._) => {};
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -9,6 +10,7 @@ const sequelize = new Sequelize(
         host: process.env.DB_HOST || 'localhost',
         dialect: 'mysql',
         port: process.env.DB_PORT || 3306,
+        logging: logging
     }
 );
 

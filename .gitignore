@@ -1,5 +1,5 @@
 # Development #
-.env
+*.env
 /dev/
 /db/
 

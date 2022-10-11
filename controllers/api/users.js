@@ -61,8 +61,14 @@ router.post('/login', async function (req, res) {
         if(!password)
             badRequest('password missing in request body!');
 
-        const user = await User.findOne(username);
-        if(!user || (await user.checkPass(password)))
+        const user = await User.findOne({
+            where: { username: username },
+            attributes: {
+                include: ['password']
+            }
+        });
+
+        if(!user || !(await user.checkPass(password)))
             badRequest(`incorrect username or password!`); // do not tell them if they got the username or password wrong
 
         req.session.save(() => {
