@@ -25,25 +25,27 @@ router.get('/', async function (req, res) {
     }
 });
 
-router.get('/login', async function (req, res) {
+router.get('/login', function (req, res) {
     if(req.session.loggedIn) {
         res.redirect('/');
         return;
     }
     res.render('login', {
         needScript: true,
-        script: 'login'
+        script: 'login',
+        loggedIn: req.session.loggedIn
     });
 });
 
-router.get('/register', async function (req, res) {
+router.get('/register', function (req, res) {
     if(req.session.loggedIn) {
         res.redirect('/');
         return;
     }
     res.render('register', {
         needScript: true,
-        script: 'register'
+        script: 'register',
+        loggedIn: req.session.loggedIn
     });
 });
 
@@ -75,11 +77,26 @@ router.get('/posts/:id', async function (req, res) {
             ]
         });
 
+        if(!postData) {
+            res.redirect('/404');
+            return;
+        }
+
         const post = postData.get({ plain: true });
         post.date = new Date(post.date.toString()).toLocaleDateString();
-        res.render('post', { post });
+        post.comments = post.comments.map(comment => {
+            comment.date = new Date(comment.date.toString()).toLocaleDateString();
+            return comment;
+        });
+
+        res.render('post', {
+            post,
+            loggedIn: req.session.loggedIn
+        });
     } catch(err) {
         console.log(err);
+        res.status(500);
+        res.json(err);
     }
 });
 

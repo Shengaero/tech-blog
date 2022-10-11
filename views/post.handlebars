@@ -1,6 +1,6 @@
 {{> post-details post }}
-<div>
+<section class="container-fluid flex-column">
   {{#each post.comments as |comment|}}
   {{> comment-details}}
   {{/each}}
-</div>
+</section>
