@@ -1,0 +1,6 @@
+<div class="row form-floating mx-3 mb-3">
+  <textarea class="form-control" style="min-height: 40vh; resize: none;" id="inputContent" type="text"
+    placeholder="Content" rows="3" minlength="1" required>{{#if hasPreexistingContent}}{{preexistingContent}}{{/if}}</textarea>
+  <label for="inputContent">Content</label>
+  <div class="invalid-feedback">Please enter content for the post</div>
+</div>

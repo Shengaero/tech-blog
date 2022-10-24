@@ -1,6 +1,30 @@
 {{> post-details post }}
-<div>
+<section class="container-fluid flex-column">
   {{#each post.comments as |comment|}}
   {{> comment-details}}
   {{/each}}
+</section>
+<div class="position-absolute bottom-0 start-50 translate-middle-x mb-4">
+  <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createCommentModal">
+    New Comment
+  </button>
+</div>
+<div class="modal fade" id="createCommentModal" tabindex="-1" aria-labelledby="createCommentModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h1 class="text-white modal-title fs-5" id="createCommentModalLabel">Create New Comment</h1>
+      </div>
+      <div class="modal-body">
+        <form class="needs-validation" id="createCommentForm" novalidate>
+          {{> form-content}}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="createCommentModalButton">Comment</button>
+      </div>
+    </div>
+  </div>
 </div>

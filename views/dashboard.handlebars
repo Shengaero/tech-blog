@@ -1,0 +1,27 @@
+{{#each posts as |post|}}
+{{> post-details}}
+{{/each}}
+<div class="position-absolute bottom-0 start-50 translate-middle-x mb-4">
+  <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createPostModal">
+    New Post
+  </button>
+</div>
+<div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h1 class="text-white modal-title fs-5" id="createPostModalLabel">Create New Post</h1>
+      </div>
+      <div class="modal-body">
+        <form class="needs-validation" id="createPostForm" novalidate>
+          {{> form-title}}
+          {{> form-content}}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="createPostModalButton">Post</button>
+      </div>
+    </div>
+  </div>
+</div>

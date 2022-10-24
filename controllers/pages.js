@@ -1,6 +1,6 @@
-const { Post, Comment, User } = require('../model');
-
 const router = require('express').Router();
+const { withAuth, redirectLoggedIn } = require('./auth');
+const { Post, Comment, User } = require('../model');
 
 router.get('/', async function (req, res) {
     try {
@@ -25,25 +25,19 @@ router.get('/', async function (req, res) {
     }
 });
 
-router.get('/login', async function (req, res) {
-    if(req.session.loggedIn) {
-        res.redirect('/');
-        return;
-    }
+router.get('/login', redirectLoggedIn, function (req, res) {
     res.render('login', {
         needScript: true,
-        script: 'login'
+        script: 'login',
+        loggedIn: req.session.loggedIn
     });
 });
 
-router.get('/register', async function (req, res) {
-    if(req.session.loggedIn) {
-        res.redirect('/');
-        return;
-    }
+router.get('/register', redirectLoggedIn, function (req, res) {
     res.render('register', {
         needScript: true,
-        script: 'register'
+        script: 'register',
+        loggedIn: req.session.loggedIn
     });
 });
 
@@ -75,11 +69,53 @@ router.get('/posts/:id', async function (req, res) {
             ]
         });
 
+        if(!postData) {
+            res.redirect('/404');
+            return;
+        }
+
         const post = postData.get({ plain: true });
         post.date = new Date(post.date.toString()).toLocaleDateString();
-        res.render('post', { post });
+        post.comments = post.comments.map(comment => {
+            comment.date = new Date(comment.date.toString()).toLocaleDateString();
+            return comment;
+        });
+
+        res.render('post', {
+            post: post,
+            needScript: true,
+            script: 'post',
+            loggedIn: req.session.loggedIn
+        });
     } catch(err) {
         console.log(err);
+        res.status(500);
+        res.json(err);
+    }
+});
+
+router.get('/dashboard', withAuth, async function (req, res) {
+    try {
+        const postData = await Post.findAll({
+            where: { author_id: req.session.userId }
+        });
+
+        const posts = postData.map(post => {
+            const plainPost = post.get({ plain: true });
+            plainPost.date = new Date(plainPost.date.toString()).toLocaleDateString();
+            return plainPost;
+        });
+
+        res.render('dashboard', {
+            posts: posts,
+            needScript: true,
+            script: 'dashboard',
+            loggedIn: req.session.loggedIn
+        });
+    } catch(err) {
+        console.log(err);
+        res.status(500);
+        res.json(err);
     }
 });
 

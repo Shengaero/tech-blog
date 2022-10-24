@@ -1,34 +1,8 @@
-const { User, Post } = require('../../model');
+const { User } = require('../../model');
 const handleError = require('./handleError');
-const { notFound, badRequest } = require('./StatusError');
-
 const router = require('express').Router();
 
-const findUserById = (id) => User.findByPk(id, {
-    include: [
-        {
-            model: Post,
-            attributes: {
-                exclude: ['content', 'author_id']
-            }
-        }
-    ]
-});
-
-router.get('/:id', async function (req, res) {
-    const { id } = req.params;
-    try {
-        const user = await findUserById(id);
-        if(!user)
-            notFound('user was not found!');
-        res.status(200);
-        res.json(user);
-    } catch(err) {
-        handleError(err, res);
-    }
-});
-
-// create new user
+// register new user
 router.post('/', async function (req, res) {
     const body = req.body;
     try {
@@ -53,6 +27,7 @@ router.post('/', async function (req, res) {
     }
 });
 
+// login user
 router.post('/login', async function (req, res) {
     const { username, password } = req.body;
     try {
@@ -73,6 +48,7 @@ router.post('/login', async function (req, res) {
 
         req.session.save(() => {
             req.session.loggedIn = true;
+            req.session.userId = user.id;
 
             res.status(200);
             res.json({ user: user, message: 'You are now logged in!' });
@@ -82,6 +58,7 @@ router.post('/login', async function (req, res) {
     }
 });
 
+// logout user
 router.post('/logout', async function (req, res) {
     if(req.session.loggedIn) {
         req.session.destroy(() => {
