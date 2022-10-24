@@ -1,9 +1,9 @@
 const { User } = require('../../model');
-const handleError = require('./handleError');
+const { handleError, badRequest } = require('./handleError');
 const router = require('express').Router();
 
 // register new user
-router.post('/', async function (req, res) {
+router.post('/', async function(req, res) {
     const body = req.body;
     try {
         const user = await User.create(body, {
@@ -28,7 +28,7 @@ router.post('/', async function (req, res) {
 });
 
 // login user
-router.post('/login', async function (req, res) {
+router.post('/login', async function(req, res) {
     const { username, password } = req.body;
     try {
         if(!username)
@@ -59,7 +59,7 @@ router.post('/login', async function (req, res) {
 });
 
 // logout user
-router.post('/logout', async function (req, res) {
+router.post('/logout', async function(req, res) {
     if(req.session.loggedIn) {
         req.session.destroy(() => {
             res.status(204).end();
